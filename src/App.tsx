@@ -7,6 +7,10 @@ import getpost from "./componentes/GetPost";
 import actualizar from "./componentes/UpdatePost";
 import eliminar from "./componentes/DeletePost";
 import getID from "./componentes/GetID";
+import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
 
 function imprimir_data() {
   getpost()
@@ -16,14 +20,33 @@ function imprimir_data() {
         const y = document.createElement("tr");
         const z = document.createElement("td");
         const a = document.createElement("td");
+        const m = document.createElement("td");
+        const l = document.createElement("td");
         const b = document.createTextNode(response.data[i].id_marca);
         const c = document.createTextNode(response.data[i].nombre);
+        const d = document.createTextNode(response.data[i].activo.toString());
+        const e = document.createTextNode(
+          response.data[i].item_ya_usado.toString()
+        );
+
         z.appendChild(b);
         a.appendChild(c);
+
+        m.appendChild(d);
+        l.appendChild(e);
+
         y.appendChild(z);
         y.appendChild(a);
+
+        y.appendChild(m);
+        y.appendChild(l);
+
         x.appendChild(y);
+
+        console.log(response.data[i].id_marca);
         console.log(response.data[i].nombre);
+        console.log(response.data[i].activo);
+        console.log(response.data[i].item_ya_usado);
       }
     })
     .catch(function (error) {
@@ -87,21 +110,23 @@ function obtener_data_form_get_id() {
 const App = () => {
   return (
     <div>
+      
       <center>
         <h1>App</h1>
       </center>
-
       <h1>Lista</h1>
       <button onClick={imprimir_data}>Listar</button>
-      <table className="data">
+      <Table striped bordered hover className="data">
         <thead>
           <tr>
             <th>Id</th>
             <th>Nombre</th>
+            <th>Activo</th>
+            <th>Item Ya Usado</th>
           </tr>
         </thead>
         <tbody></tbody>
-      </table>
+      </Table>
       <hr />
       <h1>Crear</h1>
       <div className="container_post">
@@ -141,7 +166,11 @@ const App = () => {
       <hr />
       <h1>Obtener por id</h1>
       <input type="text" name="id_get" id="id_get" />
-      <input type="button" value="Obtener" onClick={obtener_data_form_get_id} />
+      {/* <input type="button" value="Obtener" onClick={obtener_data_form_get_id} /> */}
+      {/* <button variant="primary" onClick={obtener_data_form_get_id}>Obtener</button> */}
+      <Button variant="primary" onClick={obtener_data_form_get_id}>
+        Obtener
+      </Button>{" "}
       <span id="resultado"></span>
     </div>
   );
