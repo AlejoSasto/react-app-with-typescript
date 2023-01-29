@@ -8,9 +8,6 @@ import actualizar from "./componentes/UpdatePost";
 import eliminar from "./componentes/DeletePost";
 import getID from "./componentes/GetID";
 import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 
 function imprimir_data() {
   getpost()
@@ -110,68 +107,128 @@ function obtener_data_form_get_id() {
 const App = () => {
   return (
     <div>
-      
-      <center>
-        <h1>App</h1>
-      </center>
-      <h1>Lista</h1>
-      <button onClick={imprimir_data}>Listar</button>
-      <Table striped bordered hover className="data">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Nombre</th>
-            <th>Activo</th>
-            <th>Item Ya Usado</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </Table>
-      <hr />
-      <h1>Crear</h1>
-      <div className="container_post">
-        <input type="text" name="nombre" id="nombre" />
-        <input type="button" value="Enviar" onClick={obtener_data_form} />
+      <div className="row">
+        <div className="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+          <center>
+            <h1>Api consume servicios Web</h1>
+          </center>
+          <center>
+            <h1>Lista </h1>
+          </center>
+          <button
+            className="btn btn-success btn-block text-white"
+            onClick={imprimir_data}
+          >
+            Listar
+          </button>
+          <div className="table-responsive py-2">
+            <Table striped bordered hover className="data">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Nombre</th>
+                  <th>Activo</th>
+                  <th>Item Ya Usado</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </Table>
+          </div>
+          <hr />
+        </div>
+        <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+          <div className="card">
+            <div className="card-body">
+              <h1>Crear</h1>
+              <div className="container_post">
+                <div className="form-group">
+                  <input
+                    type="text"
+                    placeholder="Ingrese Nombre de la Marca"
+                    name="nombre"
+                    id="nombre"
+                    className="form-control"
+                  />
+                  <input
+                    className="btn btn-success btn-block text-white"
+                    type="button"
+                    value="Enviar"
+                    onClick={obtener_data_form}
+                  />
+                </div>
+              </div>
+              <hr />
+              <h1>Actualizar</h1>
+              <div className="container_update">
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="id_marca"
+                    id="id_marca"
+                    placeholder="Ingrese Id de la Marca"
+                    className="form-control"
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="nombre_actualizar"
+                    id="nombre_actualizar"
+                    placeholder="Ingrese Nombre de la Marca"
+                    className="form-control"
+                  />
+                </div>
+                <div className="form-group">
+                <input type="checkbox" name="estado" id="estado" />
+                <label className="form-check-label">
+                  Activo/Falso
+                </label>
+                </div>
+                <input
+                  className="btn btn-success btn-block text-white"
+                  type="button"
+                  value="Enviar"
+                  onClick={obtener_data_form_update}
+                />
+              </div>
+              <hr />
+              <h1>Eliminar por id</h1>
+              <div className="form-group">
+              <input className="form-control" 
+              type="text" 
+              name="id_eliminar" 
+              id="id_eliminar" 
+              placeholder="Ingrese Id de la Marca" />
+              
+              <div className="form-group">
+              </div>
+              <button
+                className="btn btn-success btn-block text-white"
+                onClick={obtener_data_form_delete}>
+                Eliminar
+              </button>
+              </div>
+              {/* <input
+            type="button"
+            value="Eliminar"
+            onClick={obtener_data_form_delete}
+          /> */}
+              <hr />
+              <h1>Obtener por id</h1>
+              <input type="text" name="id_get" id="id_get" />
+              {/* <input type="button" value="Obtener" onClick={obtener_data_form_get_id} /> */}
+              {/* <button variant="primary" onClick={obtener_data_form_get_id}>Obtener</button> */}
+              <button
+                className="btn btn-success btn-block text-white"
+                onClick={obtener_data_form_get_id}
+              >
+                Obtener
+              </button>
+              <span id="resultado"></span>
+            </div>
+          </div>
+        </div>
       </div>
-      <hr />
-      <h1>Actualizar</h1>
-      <div className="container_update">
-        <input
-          type="text"
-          name="id_marca"
-          id="id_marca"
-          placeholder="Id de la marca"
-        />
-        <input
-          type="text"
-          name="nombre_actualizar"
-          id="nombre_actualizar"
-          placeholder="Nombre"
-        />
-        <input type="checkbox" name="estado" id="estado" />
-        <input
-          type="button"
-          value="Enviar"
-          onClick={obtener_data_form_update}
-        />
-      </div>
-      <hr />
-      <h1>Eliminar por id</h1>
-      <input type="text" name="id_eliminar" id="id_eliminar" />
-      <input
-        type="button"
-        value="Eliminar"
-        onClick={obtener_data_form_delete}
-      />
-      <hr />
-      <h1>Obtener por id</h1>
-      <input type="text" name="id_get" id="id_get" />
-      {/* <input type="button" value="Obtener" onClick={obtener_data_form_get_id} /> */}
-      {/* <button variant="primary" onClick={obtener_data_form_get_id}>Obtener</button> */}
-      <Button variant="primary" onClick={obtener_data_form_get_id}>
-        Obtener
-      </Button>{" "}
-      <span id="resultado"></span>
     </div>
   );
 };
