@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import axios from "axios";
 // import { GetPost } from "./componentes/GetPost";
 import post_almacen from "./componentes/CreatePost";
 import getpost from "./componentes/GetPost";
@@ -8,6 +9,7 @@ import actualizar from "./componentes/UpdatePost";
 import eliminar from "./componentes/DeletePost";
 import getID from "./componentes/GetID";
 import Table from "react-bootstrap/Table";
+import { render } from "@testing-library/react";
 
 function imprimir_data() {
   getpost()
@@ -50,14 +52,76 @@ function imprimir_data() {
       console.log(error);
     });
 }
+export class MarcaList extends React.Component {
+  state = {
+    Marcas: [],
+  };
+
+  componentDidMount() {
+    axios
+      .get(
+        `https://backend-bia-beta-production.up.railway.app/api/almacen/marcas/get-list/`
+      )
+      .then((res) => {
+        const Marcas = res.data;
+        this.setState({ Marcas });
+      });
+  }
+
+  render() {
+    return (
+      <div className="row">
+        <div className="table-responsive py-2">
+          <div className="container-fluid p-2 bg-primary text-white text-center">
+            <h1>Lista de Marcas</h1>
+          </div>
+          <div className="form-group"></div>
+          <div className="container mt-5">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>id_marca</th>
+                  <th>nombre</th>
+                  <th>activo</th>
+                  <th>item_ya_usado</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          {this.state.Marcas.map(
+            ({ id_marca, nombre, activo, item_ya_usado }: any) => {
+              return (
+                <div className="container mt-5">
+                  <table className="table table-striped">
+                    <tbody>
+                      <tr>
+                        <td>{id_marca}</td>
+                        <td>{nombre}</td>
+                        <td>{activo.toString()}</td>
+                        <td>{item_ya_usado.toString()}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              );
+            }
+          )}
+        </div>
+      </div>
+    );
+  }
+}
 function obtener_data_form() {
   const nombre = document.getElementById("nombre") as HTMLInputElement;
   console.log(nombre.value);
   post_almacen(nombre.value)
     .then(function (response) {
       console.log(response);
+      imprimir_data();
+      alert("Se Creo Marca correctamente" + response.status);
     })
     .catch(function (error) {
+      alert("Error al Crear: " + error);
       console.log(error);
     });
 }
@@ -96,7 +160,31 @@ function obtener_data_form_get_id() {
   const resultado = document.getElementById("resultado") as HTMLInputElement;
   getID(id.value)
     .then(function (response) {
-      resultado.innerHTML = response.data.nombre + " " + response.data.activo;
+      const x = document.getElementsByClassName("resultado")[0];
+      const y = document.createElement("tr");
+      const z = document.createElement("td");
+      const a = document.createElement("td");
+      const m = document.createElement("td");
+      const l = document.createElement("td");
+      const b = document.createTextNode(response.data.id_marca);
+      const c = document.createTextNode(response.data.nombre);
+      const d = document.createTextNode(response.data.activo.toString());
+      const e = document.createTextNode(response.data.item_ya_usado.toString());
+
+      z.appendChild(b);
+      a.appendChild(c);
+
+      m.appendChild(d);
+      l.appendChild(e);
+
+      y.appendChild(z);
+      y.appendChild(a);
+
+      y.appendChild(m);
+      y.appendChild(l);
+
+      x.appendChild(y);
+
       alert("Se obtuvo correctamente" + response.status);
     })
     .catch(function (error) {
@@ -107,6 +195,7 @@ function obtener_data_form_get_id() {
 const App = () => {
   return (
     <div>
+      {/* <MarcaList /> */}
       <div className="row">
         <div className="col-sm-12 col-md-6 col-lg-8 col-xl-8">
           <center>
@@ -122,18 +211,35 @@ const App = () => {
             Listar
           </button>
           <div className="table-responsive py-2">
-            <Table striped bordered hover className="data">
-              <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Nombre</th>
-                  <th>Activo</th>
-                  <th>Item Ya Usado</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </Table>
+            <div className="container mt-5">
+              <Table striped bordered hover className="data">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Activo</th>
+                    <th>Item Ya Usado.</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </Table>
+            </div>
           </div>
+          <center>
+            <h1>Datos Optenidos por id </h1>
+          </center>
+
+          <Table striped bordered hover className="resultado">
+            <thead>
+              <tr>
+                <th>Id.to</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Item Ya Usado</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </Table>
           <hr />
         </div>
         <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
@@ -179,10 +285,8 @@ const App = () => {
                   />
                 </div>
                 <div className="form-group">
-                <input type="checkbox" name="estado" id="estado" />
-                <label className="form-check-label">
-                  Activo/Falso
-                </label>
+                  <input type="checkbox" name="estado" id="estado" />
+                  <label className="form-check-label">Activo/Falso</label>
                 </div>
                 <input
                   className="btn btn-success btn-block text-white"
@@ -194,19 +298,21 @@ const App = () => {
               <hr />
               <h1>Eliminar por id</h1>
               <div className="form-group">
-              <input className="form-control" 
-              type="text" 
-              name="id_eliminar" 
-              id="id_eliminar" 
-              placeholder="Ingrese Id de la Marca" />
-              
-              <div className="form-group">
-              </div>
-              <button
-                className="btn btn-success btn-block text-white"
-                onClick={obtener_data_form_delete}>
-                Eliminar
-              </button>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="id_eliminar"
+                  id="id_eliminar"
+                  placeholder="Ingrese Id de la Marca"
+                />
+
+                <div className="form-group"></div>
+                <button
+                  className="btn btn-success btn-block text-white"
+                  onClick={obtener_data_form_delete}
+                >
+                  Eliminar
+                </button>
               </div>
               {/* <input
             type="button"
@@ -215,16 +321,26 @@ const App = () => {
           /> */}
               <hr />
               <h1>Obtener por id</h1>
-              <input type="text" name="id_get" id="id_get" />
+              <div className="form-group">
+                <input
+                  className="form-control"
+                  type="text"
+                  name="id_get"
+                  id="id_get"
+                  placeholder="Ingrese Id de la Marca"
+                />
+              </div>
               {/* <input type="button" value="Obtener" onClick={obtener_data_form_get_id} /> */}
               {/* <button variant="primary" onClick={obtener_data_form_get_id}>Obtener</button> */}
-              <button
-                className="btn btn-success btn-block text-white"
-                onClick={obtener_data_form_get_id}
-              >
-                Obtener
-              </button>
-              <span id="resultado"></span>
+              <div className="form-group">
+                <button
+                  className="btn btn-success btn-block text-white"
+                  onClick={obtener_data_form_get_id}
+                >
+                  Obtener
+                </button>
+                <span id="resultado"></span>
+              </div>
             </div>
           </div>
         </div>
