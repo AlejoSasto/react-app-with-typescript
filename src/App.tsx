@@ -199,10 +199,12 @@ const App = () => {
       <div className="row">
         <div className="col-sm-12 col-md-6 col-lg-8 col-xl-8">
           <center>
+          {/* <div className="container-fluid p-2 bg-primary text-white text-center"> */}
             <h1>Api consume servicios Web</h1>
+            {/* <div> */}
           </center>
           <center>
-            <h1>Lista </h1>
+            <h1>Lista de Marcas</h1>
           </center>
           <button
             className="btn btn-success btn-block text-white"
@@ -334,7 +336,7 @@ const App = () => {
               {/* <button variant="primary" onClick={obtener_data_form_get_id}>Obtener</button> */}
               <div className="form-group">
                 <button
-                  className="btn btn-success btn-block text-white"
+                  className="btn btn-success btn-block"
                   onClick={obtener_data_form_get_id}
                 >
                   Obtener
